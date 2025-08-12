@@ -19,6 +19,9 @@ services:
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: projectdb
+      JWT_SECRET: your-super-secret-jwt-key-change-in-production-please-use-at-least-32-characters
+      JWT_EXPIRES_IN: 24h
+      NODE_ENV: development
     depends_on:
       - db
 volumes:
