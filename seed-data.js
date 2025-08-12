@@ -1,4 +1,5 @@
 const { sequelize, User, Project, Story, Task, LoggingHour } = require('./src/models');
+const AuthService = require('./src/services/authService');
 
 async function seedDatabase() {
   try {
@@ -16,15 +17,25 @@ async function seedDatabase() {
     await User.destroy({ where: {} });
     console.log('🧹 Cleared existing data');
 
-    // Create 5 users
-    const users = await User.bulkCreate([
-      { name: 'Alice Johnson', email: 'alice@company.com', password: 'password123' },
-      { name: 'Bob Smith', email: 'bob@company.com', password: 'password123' },
-      { name: 'Carol Williams', email: 'carol@company.com', password: 'password123' },
-      { name: 'David Brown', email: 'david@company.com', password: 'password123' },
-      { name: 'Emma Davis', email: 'emma@company.com', password: 'password123' }
-    ]);
-    console.log('👥 Created 5 users');
+    // Create 5 users with hashed passwords
+    const userData = [
+      { name: 'Wafaa Farajallah', email: 'wafaa@rakchamber.ae', password: 'password123' },
+      { name: 'Mohammed Morhaf', email: 'm.murhaf@rakchamber.ae', password: 'password123' },
+      { name: 'Saad AlAfandi', email: 'saad.cs7@gmail.com', password: 'password123' },
+      { name: 'Aamnah alshehhi ', email: 'aalshehhi@rakchamber.ae', password: 'password123' },
+      { name: 'Admin', email: 'admin@company.com', password: 'password123' }
+    ];
+
+    const users = [];
+    for (const user of userData) {
+      const hashedPassword = await AuthService.hashPassword(user.password);
+      const createdUser = await User.create({
+        ...user,
+        password: hashedPassword
+      });
+      users.push(createdUser);
+    }
+    console.log('👥 Created 5 users with hashed passwords');
 
     // Create 5 projects
     const projects = await Project.bulkCreate([
