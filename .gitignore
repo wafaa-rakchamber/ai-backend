@@ -135,3 +135,6 @@ logs
 # Backup files
 *.bak
 *.backup
+
+#self notes
+.wafaa-notes
